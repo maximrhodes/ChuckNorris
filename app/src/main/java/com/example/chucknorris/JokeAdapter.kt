@@ -17,7 +17,7 @@ class JokeAdapter  : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>(){
     class JokeViewHolder(val joke: TextView) : RecyclerView.ViewHolder(joke)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokeViewHolder {
-        val textView = LayoutInflater.from(parent.context).inflate(R.layout.layout_view, parent, false) as TextView
+        val textView = LayoutInflater.from(parent.context).inflate(R.layout.joke_layout, parent, false) as TextView
         return JokeViewHolder(textView)
     }
 

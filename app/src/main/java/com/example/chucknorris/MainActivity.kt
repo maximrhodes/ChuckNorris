@@ -14,5 +14,6 @@ class MainActivity : AppCompatActivity() {
         Log.d("List", Jokes.jokes.toString())
 
         recycler_view.layoutManager = LinearLayoutManager(this)
+        recycler_view.adapter = JokeAdapter()
     }
 }
