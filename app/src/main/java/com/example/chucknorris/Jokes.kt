@@ -1,7 +1,8 @@
 package com.example.chucknorris
 
+
 object Jokes{
-    val jokes:List<String> = listOf<String>(
+    val jokes_string_list:List<String> = listOf<String>(
         "Peace disturbs Chuck Norris.",
         "Iron Maiden wrote the song 'Run to the hills' after their brief encounter with Chuck Norris.",
         "The real reason dinosaurs are extenct is because Chuck Norris went back in time.",
@@ -13,4 +14,6 @@ object Jokes{
         "There's a word for someone who doesn't like Chuck Norris movies: pussy.",
         "Chuck Norris knows the last digit of PI."
     )
+
+
 }
