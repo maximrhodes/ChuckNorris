@@ -7,6 +7,10 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlinx-serialization'
 
 android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.chucknorris"
@@ -36,4 +40,9 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0"
+
+    implementation 'com.squareup.retrofit2:retrofit:2.7.2'
+    implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.2'
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.5.0'
 }
