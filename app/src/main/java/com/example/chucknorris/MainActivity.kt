@@ -6,10 +6,15 @@ import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
+
+
+    var compositeDisposable = CompositeDisposable();
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,5 +30,19 @@ class MainActivity : AppCompatActivity() {
                 onError = { error : Throwable -> Log.e( "Error", "Erreur dans le chargement : $error" ) },
                 onSuccess = { selectedJoke -> Log.i( "joke", "$selectedJoke")}
             )
+
+
+
+        compositeDisposable.add(selectedJoke);
     }
+
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.clear()
+    }
+
+
+
 }
