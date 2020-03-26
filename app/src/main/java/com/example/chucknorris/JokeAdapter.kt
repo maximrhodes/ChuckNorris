@@ -5,14 +5,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class JokeAdapter  : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>(){
+class JokeAdapter  (private val jokeList: List<Joke>): RecyclerView.Adapter<JokeAdapter.JokeViewHolder>(){
 
-    private var jokeList: List<Joke> = Jokes.jokes_string_list.stringToJoke()
-        set(newJokeList)
-        {
-            field = newJokeList
-            notifyDataSetChanged()
-        }
 
     class JokeViewHolder(val joke: TextView) : RecyclerView.ViewHolder(joke)
 
@@ -29,14 +23,5 @@ class JokeAdapter  : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>(){
         holder.joke.text = jokeList[position].value     //correspond à la chaine de caractère (blague en elle même)
     }
 
-    private fun List<String>.stringToJoke():List<Joke> = this.map { jokes_string_list ->
-        Joke(
-            categories = emptyList(),
-            createdAt = "",
-            updatedAt = "",
-            url = "",
-            id = "",
-            iconUrl = "",
-            value = jokes_string_list
-        )}
+
 }
