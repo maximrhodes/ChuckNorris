@@ -1,9 +1,9 @@
 package com.example.chucknorris
 
-import io.reactivex.Single
+import io.reactivex.Observable
 import retrofit2.http.GET
 
 interface JokeApiService {
     @GET("jokes/random")
-    fun giveMeAJoke() : Single<Joke>
+    fun giveMeAJoke() : Observable<Joke>
 }

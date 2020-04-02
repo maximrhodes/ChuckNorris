@@ -38,15 +38,15 @@ class MainActivity : AppCompatActivity() {
     private fun addJokeToList(){
         val joke = JokeApiServiceFactory.getJokeApiService().giveMeAJoke();
 
-        val selectedJoke = joke.subscribeOn( Schedulers.io() ).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+        val selectedJoke = joke.repeat(10).subscribeOn( Schedulers.io() ).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
             onError = { error : Throwable -> Log.e( "Error", "Erreur dans le chargement : $error" ) },
-            onSuccess = { selectedJoke -> Log.i( "joke", "$selectedJoke")
-                jokeList.add(selectedJoke)}
+            onNext = { selectedJoke -> Log.i( "joke", "$selectedJoke")
+                jokeList.add(selectedJoke)
+                adapter.notifyDataSetChanged()},
+            onComplete = {}
         )
 
-        adapter.notifyDataSetChanged();
-
-        compositeDisposable.add(selectedJoke);
+        compositeDisposable.add(selectedJoke)
     }
 
 
