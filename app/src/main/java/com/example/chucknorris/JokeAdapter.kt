@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class JokeAdapter  (private val jokeList: List<Joke>): RecyclerView.Adapter<JokeAdapter.JokeViewHolder>(){
 
+    lateinit var myOnBottomReachedListener: OnBottomReachedListener
 
     class JokeViewHolder(val joke: TextView) : RecyclerView.ViewHolder(joke)
 
@@ -20,8 +21,16 @@ class JokeAdapter  (private val jokeList: List<Joke>): RecyclerView.Adapter<Joke
     }
 
     override fun onBindViewHolder(holder: JokeViewHolder, position: Int) {
+        if (position == jokeList.size - 1){
+
+            myOnBottomReachedListener.onBottomReached(position)
+
+        }
         holder.joke.text = jokeList[position].value     //correspond à la chaine de caractère (blague en elle même)
     }
 
+    fun setOnBottomReachedListener(onBottomReachedListener: OnBottomReachedListener) {
 
+        this.myOnBottomReachedListener = onBottomReachedListener
+    }
 }
