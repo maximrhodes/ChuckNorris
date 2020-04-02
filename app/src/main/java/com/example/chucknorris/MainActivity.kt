@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
+
+import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.rxkotlin.subscribeBy
@@ -17,10 +20,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 class MainActivity : AppCompatActivity() {
 
 
-    var compositeDisposable = CompositeDisposable();
-    var jokeList = mutableListOf<Joke>();
-    lateinit var adapter: RecyclerView.Adapter<*>;
-
+    private var compositeDisposable = CompositeDisposable()
+    private var jokeList = mutableListOf<Joke>()
+    private lateinit var adapter: RecyclerView.Adapter<*>
+    private val progressBar: ProgressBar = findViewById<ProgressBar>(R.id.progressBar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun addJokeToList(){
+    private fun addJokeToList(){
         val joke = JokeApiServiceFactory.getJokeApiService().giveMeAJoke();
 
         val selectedJoke = joke.subscribeOn( Schedulers.io() ).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
@@ -48,7 +51,9 @@ class MainActivity : AppCompatActivity() {
 
 
     fun jokeOnClick(view: View){
+        progressBar.visibility = VISIBLE
         addJokeToList()
+        progressBar.visibility = INVISIBLE
     }
 
     override fun onDestroy() {
