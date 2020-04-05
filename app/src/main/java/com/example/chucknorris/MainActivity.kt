@@ -15,6 +15,10 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.serialization.builtins.list
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -31,7 +35,18 @@ class MainActivity : AppCompatActivity() {
 
         recycler_view.layoutManager = LinearLayoutManager(this)
         adapter = JokeAdapter(jokeList)
-        addJokeToList()
+
+        if (savedInstanceState == null)
+            addJokeToList()
+        else {
+            savedInstanceState.getString("jokeList")?.let { jokeInJson ->
+                val jokeDeserialized = Json(JsonConfiguration.Stable).parse(
+                    Joke.serializer().list,
+                    jokeInJson
+                )
+                jokeList.addAll(jokeDeserialized)
+            }
+        }
 
         adapter.setOnBottomReachedListener(object : OnBottomReachedListener {
             override fun onBottomReached(position: Int) {
@@ -58,8 +73,16 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        val json = Json(JsonConfiguration.Stable)
+        val jsonData = json.stringify(Joke.serializer().list, jokeList)
+        outState.putString("jokeList",jsonData)
+        super.onSaveInstanceState(outState)
+    }
+
 
     override fun onDestroy() {
+
         super.onDestroy()
         compositeDisposable.clear()
     }
