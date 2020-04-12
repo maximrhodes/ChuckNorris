@@ -29,12 +29,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: JokeAdapter
     private val progressBar: ProgressBar = findViewById<ProgressBar>(R.id.progressBar)
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         recycler_view.layoutManager = LinearLayoutManager(this)
         adapter = JokeAdapter(jokeList)
+        adapter.setOnShareCLickListener { id -> onShareClicked(id) }
+        adapter.setOnSaveCLickListener { id, item -> onSaveClicked(id, item) }
+
 
         if (savedInstanceState == null)
             addJokeToList()
@@ -58,6 +63,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+
     private fun addJokeToList(){
         val joke = JokeApiServiceFactory.getJokeApiService().giveMeAJoke();
 
@@ -73,6 +80,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
     override fun onSaveInstanceState(outState: Bundle) {
         val json = Json(JsonConfiguration.Stable)
         val jsonData = json.stringify(Joke.serializer().list, jokeList)
@@ -81,12 +89,25 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
     override fun onDestroy() {
 
         super.onDestroy()
         compositeDisposable.clear()
     }
 
+
+
+
+    private fun onSaveClicked(id: String, item:View){
+        Log.wtf("joke_id", id )
+        item as JokeView
+        item.isSaved = !item.isSaved
+    }
+
+    private fun onShareClicked(id: String){
+        Log.wtf("joke_id", id)
+    }
 
 
 }

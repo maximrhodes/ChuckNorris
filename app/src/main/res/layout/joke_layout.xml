@@ -1,10 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:textSize="22sp"
-          android:id="@+id/my_text_view"
-          android:padding="15dp"
-          android:layout_margin="10dp"
-          android:textAlignment="center"
-/>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:app="http://schemas.android.com/apk/res-auto"
+       xmlns:tools="http://schemas.android.com/tools"
+       tools:layout_width="match_parent"
+       tools:layout_height="wrap_content"
+       tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <TextView
+            android:id="@+id/jokeText"
+            android:layout_width="250dp"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Ceci est une blague"/>
+
+    <ImageButton
+            android:id="@+id/imageShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageStar"
+            app:layout_constraintStart_toEndOf="@+id/jokeText"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_share_black_24dp"/>
+
+    <ImageButton
+            android:id="@+id/imageStar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_star_border_black_24dp"/>
+
+</merge>
