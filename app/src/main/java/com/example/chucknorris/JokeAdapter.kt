@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.joke_layout.view.*
+import java.util.*
 
 class JokeAdapter  (private val jokeList: List<Joke>): RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
 
@@ -38,6 +39,29 @@ class JokeAdapter  (private val jokeList: List<Joke>): RecyclerView.Adapter<Joke
     override fun getItemCount(): Int {
         return jokeList.size
     }
+
+
+
+
+    fun onItemMoved(from: Int, to: Int) {
+        if (from < to)
+            (from until to).forEach {
+                Collections.swap(jokeList, it, it + 1)
+            }
+        else
+            (to until from).forEach {
+                Collections.swap(jokeList, it, it + 1)
+            }
+        this.notifyItemMoved(from, to)
+    }
+
+    fun onJokeRemoved(position: Int) {
+        jokeList.toMutableList().removeAt(position)
+        this.notifyItemRemoved(position)
+    }
+
+
+
 
 
     override fun onBindViewHolder(holder: JokeViewHolder, position: Int) {

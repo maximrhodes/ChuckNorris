@@ -25,15 +25,15 @@ class MainActivity : AppCompatActivity() {
 
 
     private var compositeDisposable = CompositeDisposable()
-    private var jokeList = mutableListOf<Joke>()
+    private var jokeList: MutableList<Joke> = mutableListOf()
     private lateinit var adapter: JokeAdapter
-    private val progressBar: ProgressBar = findViewById<ProgressBar>(R.id.progressBar)
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
 
         recycler_view.layoutManager = LinearLayoutManager(this)
         adapter = JokeAdapter(jokeList)
@@ -53,8 +53,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        val jokeTouchHelper = JokeTouchHelper(
+            { position -> adapter.onJokeRemoved(position) },
+            { from, to -> adapter.onItemMoved(from, to) })
+        jokeTouchHelper.attachToRecyclerView(recycler_view)
+
         adapter.setOnBottomReachedListener(object : OnBottomReachedListener {
             override fun onBottomReached(position: Int) {
+                val progressBar: ProgressBar = findViewById<ProgressBar>(R.id.progressBar)
                 progressBar.visibility = VISIBLE
                 addJokeToList()
                 progressBar.visibility = INVISIBLE
