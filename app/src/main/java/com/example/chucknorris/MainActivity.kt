@@ -1,5 +1,6 @@
 package com.example.chucknorris
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -37,8 +38,8 @@ class MainActivity : AppCompatActivity() {
 
         recycler_view.layoutManager = LinearLayoutManager(this)
         adapter = JokeAdapter(jokeList)
-        adapter.setOnShareCLickListener { id -> onShareClicked(id) }
-        adapter.setOnSaveCLickListener { id, item -> onSaveClicked(id, item) }
+        adapter.setOnShareCLickListener { value -> onShareClicked(value) }
+        adapter.setOnSaveCLickListener { id -> onSaveClicked(id) }
 
 
         if (savedInstanceState == null)
@@ -105,14 +106,18 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    private fun onSaveClicked(id: String, item:View){
-        Log.wtf("joke_id", id )
-        item as JokeView
-        item.isSaved = !item.isSaved
+    private fun onSaveClicked(id: String){
+
     }
 
     private fun onShareClicked(id: String){
-        Log.wtf("joke_id", id)
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, id)
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
     }
 
 

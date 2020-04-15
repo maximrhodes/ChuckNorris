@@ -14,15 +14,6 @@ class JokeView @JvmOverloads constructor(context: Context,
                                          defStyleAttr: Int = 0) : ConstraintLayout( context, attrs, defStyleAttr) {
 
 
-    var isSaved: Boolean = false
-        set(value) {
-            when (value) {
-                true ->  changeStar(R.drawable.ic_star_black_24dp)
-                false -> changeStar(R.drawable.ic_star_border_black_24dp)
-            }
-            field = value
-        }
-
 
 
     init {
@@ -32,15 +23,28 @@ class JokeView @JvmOverloads constructor(context: Context,
     }
 
 
-    data class Model(val value: String)
+    data class Model(val joke: Joke, val isSaved: Boolean, val myOnShareClickListener: (id: String) -> Unit = {}, val myOnSaveClickListener: (value: String) -> Unit = {})
 
     fun setUpView(model: Model) {
-        jokeText.text = model.value
+        jokeText.text = model.joke.value
+        changeStar(model.isSaved)
+        imageShare.setOnClickListener { model.myOnShareClickListener(model.joke.value) }
+        imageStar.setOnClickListener {
+            model.myOnSaveClickListener(model.joke.id)
+            changeStar(model.isSaved)
+            setUpView(model.copy(isSaved=!model.isSaved))
+        }
     }
 
 
-    private fun changeStar(im: Int) {
-        imageStar.setImageResource(im)
+
+    private fun changeStar(isSaved: Boolean) {
+        if (isSaved){
+            imageStar.setImageResource(R.drawable.ic_star_black_24dp)
+        }
+        else {
+            imageStar.setImageResource(R.drawable.ic_star_border_black_24dp)
+        }
     }
 
 

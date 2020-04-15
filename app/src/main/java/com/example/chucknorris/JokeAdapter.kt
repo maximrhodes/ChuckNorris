@@ -10,8 +10,8 @@ import java.util.*
 class JokeAdapter  (private val jokeList: List<Joke>): RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
 
     private lateinit var myOnBottomReachedListener: OnBottomReachedListener
-    private var myOnShareClickListener: (id: String) -> Unit = {}
-    private var myOnSaveClickListener: (id: String, item: View) -> Unit = { _: String, _: View -> }
+    private var myOnShareClickListener: (value: String) -> Unit = {}
+    private var myOnSaveClickListener: (id: String) -> Unit = {}
 
 
     fun setOnBottomReachedListener(onBottomReachedListener: OnBottomReachedListener) {
@@ -23,7 +23,7 @@ class JokeAdapter  (private val jokeList: List<Joke>): RecyclerView.Adapter<Joke
         myOnShareClickListener = onShareClickListener
     }
 
-    fun setOnSaveCLickListener(onSaveClickListener: (id: String, item: View) -> Unit) {
+    fun setOnSaveCLickListener(onSaveClickListener: (value: String) -> Unit) {
         myOnSaveClickListener = onSaveClickListener
     }
 
@@ -65,10 +65,10 @@ class JokeAdapter  (private val jokeList: List<Joke>): RecyclerView.Adapter<Joke
 
 
     override fun onBindViewHolder(holder: JokeViewHolder, position: Int) {
-        holder.joke.setUpView(JokeView.Model(jokeList[position].value))
+        holder.joke.setUpView(JokeView.Model(jokeList[position],false, myOnShareClickListener, myOnSaveClickListener))
         holder.joke.imageShare.setOnClickListener { myOnShareClickListener(jokeList[position].id) }
         holder.joke.imageStar.setOnClickListener {
-            myOnSaveClickListener(jokeList[position].id, holder.joke)
+            myOnSaveClickListener(jokeList[position].id)
             if (position == jokeList.size - 1) {
                 myOnBottomReachedListener.onBottomReached(position)
             }
