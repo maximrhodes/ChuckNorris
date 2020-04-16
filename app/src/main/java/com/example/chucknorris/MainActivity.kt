@@ -82,19 +82,23 @@ class MainActivity : AppCompatActivity() {
 
         adapter.setOnBottomReachedListener(object : OnBottomReachedListener {
             override fun onBottomReached(position: Int) {
-                val progressBar: ProgressBar = findViewById<ProgressBar>(R.id.progressBar)
-                progressBar.visibility = VISIBLE
                 addJokeToList()
-                progressBar.visibility = INVISIBLE
             }
         })
+
+        swipe_and_refresh.setOnRefreshListener {
+            addJokeToList()
+            swipe_and_refresh.isRefreshing = false
+        }
     }
 
 
 
 
     private fun addJokeToList(){
-        val joke = JokeApiServiceFactory.getJokeApiService().giveMeAJoke();
+        swipe_and_refresh.isRefreshing = true
+
+        val joke = JokeApiServiceFactory.getJokeApiService().giveMeAJoke()
 
         val selectedJoke = joke.repeat(10).subscribeOn( Schedulers.io() ).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
             onError = { error : Throwable -> Log.e( "Error", "Erreur dans le chargement : $error" ) },
@@ -105,6 +109,8 @@ class MainActivity : AppCompatActivity() {
         )
 
         compositeDisposable.add(selectedJoke)
+
+        swipe_and_refresh.isRefreshing = false
     }
 
 
