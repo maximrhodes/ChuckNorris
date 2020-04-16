@@ -1,7 +1,6 @@
 package com.example.chucknorris
 
 
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.joke_layout.view.*
@@ -11,7 +10,7 @@ class JokeAdapter  (private val jokeList: List<Joke>): RecyclerView.Adapter<Joke
 
     private lateinit var myOnBottomReachedListener: OnBottomReachedListener
     private var myOnShareClickListener: (value: String) -> Unit = {}
-    private var myOnSaveClickListener: (id: String) -> Unit = {}
+    private var myOnSaveClickListener: (id: Joke, saved: Boolean) -> Unit = {_, _ ->}
 
 
     fun setOnBottomReachedListener(onBottomReachedListener: OnBottomReachedListener) {
@@ -19,11 +18,11 @@ class JokeAdapter  (private val jokeList: List<Joke>): RecyclerView.Adapter<Joke
         this.myOnBottomReachedListener = onBottomReachedListener
     }
 
-    fun setOnShareCLickListener(onShareClickListener: (id: String) -> Unit) {
+    fun setOnShareClickListener(onShareClickListener: (value: String) -> Unit) {
         myOnShareClickListener = onShareClickListener
     }
 
-    fun setOnSaveCLickListener(onSaveClickListener: (value: String) -> Unit) {
+    fun setOnSaveClickListener(onSaveClickListener: (id: Joke, saved: Boolean) -> Unit = {_, _ ->}) {
         myOnSaveClickListener = onSaveClickListener
     }
 
@@ -68,7 +67,7 @@ class JokeAdapter  (private val jokeList: List<Joke>): RecyclerView.Adapter<Joke
         holder.joke.setUpView(JokeView.Model(jokeList[position],false, myOnShareClickListener, myOnSaveClickListener))
         holder.joke.imageShare.setOnClickListener { myOnShareClickListener(jokeList[position].id) }
         holder.joke.imageStar.setOnClickListener {
-            myOnSaveClickListener(jokeList[position].id)
+            myOnSaveClickListener(jokeList[position],false)
             if (position == jokeList.size - 1) {
                 myOnBottomReachedListener.onBottomReached(position)
             }

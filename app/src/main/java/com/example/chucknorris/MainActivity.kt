@@ -1,5 +1,6 @@
 package com.example.chucknorris
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private var compositeDisposable = CompositeDisposable()
     private var jokeList: MutableList<Joke> = mutableListOf()
     private lateinit var adapter: JokeAdapter
+    private val jokeSavedList: MutableList<Joke> = mutableListOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,10 +38,29 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
+
+        val sharedPreferences = getSharedPreferences("jokeShared", Context.MODE_PRIVATE)
+        if (sharedPreferences.contains("jokeSaved")) {
+            Log.wtf("jokepref", sharedPreferences.getString("jokeSaved", ""))
+            jokeSavedList.addAll(
+                sharedPreferences.getString("jokeSaved", "")?.let {
+                    Json(JsonConfiguration.Stable).parse(
+                        Joke.serializer().list, it
+                    )
+                }!!
+            )
+            jokeList.addAll(jokeSavedList)
+
+        }
+
+
+
+
         recycler_view.layoutManager = LinearLayoutManager(this)
         adapter = JokeAdapter(jokeList)
-        adapter.setOnShareCLickListener { value -> onShareClicked(value) }
-        adapter.setOnSaveCLickListener { id -> onSaveClicked(id) }
+        adapter.setOnShareClickListener { value -> onShareClicked(value) }
+        adapter.setOnSaveClickListener { joke: Joke, isSaved: Boolean -> onSaveClicked(joke, isSaved) }
 
 
         if (savedInstanceState == null)
@@ -106,8 +127,18 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    private fun onSaveClicked(id: String){
+    private fun onSaveClicked(joke: Joke, isSaved: Boolean) {
+        if (isSaved)
+            jokeSavedList.add(joke)
+        else
+            jokeSavedList.remove(joke)
+        val sharedPreferences = getSharedPreferences("jokeShared", Context.MODE_PRIVATE)
+        val json = Json(JsonConfiguration.Stable).stringify(Joke.serializer().list, jokeSavedList)
 
+        Log.wtf("Save", "$isSaved: $json")
+        sharedPreferences.edit()
+            .putString("jokeSaved", json)
+            .apply()
     }
 
     private fun onShareClicked(id: String){
