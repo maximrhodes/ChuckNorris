@@ -27,7 +27,7 @@ I have followed the different steps in order to create the app :
 
 > I saved the **state** of the instance in order to keep it if the screen is rotated. Then i implemented the abitily to share and save jokes thanks to **Intent**.
 
-##MVVM pattern 
+## MVVM pattern 
 
 
 
