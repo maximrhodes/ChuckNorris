@@ -29,5 +29,4 @@ I have followed the different steps in order to create the app :
 
 ## MVVM pattern 
 
-
-
+In a second time, I started to clean the architecture of the App in order to respect the MVVM pattern and have a better App architecture.
